@@ -295,6 +295,8 @@ function alpineApp() {
 						break;
 					default:
 						numLayout = 0;
+						// рисуем процент если был отступ
+						if (numNameX) page.drawSvgPath(svgPercentPath, { color: objYellowCMYK, x: page.getWidth() - mm(93.1), y: page.getHeight() - mm(1.8) });
 				}
 
 				// console.log(`Название: ${strName}; PLU: ${strPlu}; Цена за: ${strFor}; Цвет: ${objBgColorCMYK}; Макет: ${numLayout}`);
