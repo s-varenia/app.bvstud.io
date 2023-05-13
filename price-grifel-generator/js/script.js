@@ -165,9 +165,9 @@ function alpineApp() {
 			c0-0.9-0.2-1.6-0.5-2.1C29.8,25.2,29.4,24.9,28.8,24.9z`;
 
 			console.log(`скачиваем шрифты`);
-			const objDataFontComic = await fetch(`fonts/ComicSansMS.woff2`).then((res) => res.arrayBuffer());
-			const objDataFontComicBold = await fetch(`fonts/ComicSansMS-Bold.woff2`).then((res) => res.arrayBuffer());
-			const objDataFontSanaBold = await fetch(`fonts/SanaSansAlt-Black.woff2`).then((res) => res.arrayBuffer());
+			const objDataFontComic = await fetch(`fonts/comic.ttf`).then((res) => res.arrayBuffer());
+			const objDataFontComicBold = await fetch(`fonts/comicbd.ttf`).then((res) => res.arrayBuffer());
+			const objDataFontSanaBold = await fetch(`fonts/SanaSansAlt-Black.ttf`).then((res) => res.arrayBuffer());
 
 			console.log(`объявляем PDF документ`);
 			const pdfDoc = await PDFDocument.create();
@@ -320,9 +320,9 @@ function alpineApp() {
 		clearTable() {
 			if (confirm(`Усі дані у таблиці будуть видалені! Продовжити?`)) {
 				Alpine.store('app').data = [[]];
-				Alpine.store('app').objStyleCell = ``;
-				Alpine.store('app').objCommentsCell = ``;
-				Alpine.store('app').sheet.setData([[]]);
+				Alpine.store('app').objStyleCell = {};
+				Alpine.store('app').objCommentsCell = {};
+				Alpine.store('app').sheet.setData(Alpine.store('app').data);
 				this.strDownloadFileUrl = ``;
 				this.boolDownloadBtn = false;
 				this.arrLog = false;
