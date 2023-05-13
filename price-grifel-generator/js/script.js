@@ -51,38 +51,26 @@ function alpineApp() {
 			else this.numProgress = 0;
 		},
 		async createPdf() {
-			this.arrLog = [];
-			this.arrLog.push(`получаю данные из таблицы`);
 			console.log(`получаю данные из таблицы`);
-			// получаем данные из таблицы
 			const arrData = this.objSheet.getData();
-			this.arrLog.push(`проверяю таблицу на пустую`);
+
 			console.log(`проверяю таблицу на пустую`);
-			// проверяем таблицу на пустоту
 			if (arrData.map((row) => row.join(``)).join(``).length === 0) return;
-			this.arrLog.push(`активируем прогресс-бар`);
+
 			console.log(`активируем прогресс-бар`);
-			// активируем прогресс-бар
 			this.numProgress = 1;
-			this.arrLog.push(`открываем прогресс-бар через время, если он все еще будет нужен`);
 			console.log(`открываем прогресс-бар через время, если он все еще будет нужен`);
-			// открываем прогресс-бар через время, если он все еще будет нужен
 			setTimeout(() => {
 				if (this.numProgress > 0) this.openProgress = true;
 			}, '500');
-			// палитра цветов CMYK
 			const objBlackCMYK = cmyk(0, 0, 0, 1);
 			const objWhiteCMYK = cmyk(0, 0, 0, 0);
 			const objBlueCMYK = cmyk(1, 0.69, 0.07, 0.3);
 			const objRedCMYK = cmyk(0, 1, 1, 0);
 			const objYellowCMYK = cmyk(0, 0.16, 1, 0);
 
-			this.arrLog.push(`объявляю используемые кривые в макете`);
 			console.log(`объявляю используемые кривые в макете`);
-			// используемые кривые в макете
-			// фон макета с закруглениями
 			const svgBackgroundPath = `M255.1,181.4H14.2c-7.8,0-14.2-6.3-14.2-14.2V14.2C0,6.3,6.3,0,14.2,0h240.9c7.8,0,14.2,6.3,14.2,14.2v153.1C269.3,175.1,262.9,181.4,255.1,181.4z`;
-			// надпись "Власне виробництво"
 			const svgProductionPath = `M10.6,3.9c1.3,3.1-0.2,7.4-3.7,8.2c11.8,7.3-9.8,19.6-6-5.6C1,4.9,2.5,1.7,4.3,3.5C4,4.4,3.4,5,3.3,6
 			c-2.5,25.9,11.5,9.6,0.8,6.3l-0.4-0.3C4.2,11,6,11.7,6.7,11c3.4-1.7,2.9-7.2,0-9.2c-2-1.7-5,1.4-6.7-0.4C3-1.1,9.3-0.2,10.6,3.9z
 			M58.5,17.2c-0.2,3.8-6.9,6.2-7.8,1.8c-2.7,4.6-5.9,2.2-5.1-2.4c-0.8,0.5-1.3,0.9-2.1,0.9c-0.2,1,0.5,2.5-0.3,3.4
@@ -119,7 +107,6 @@ function alpineApp() {
 			c-0.2,2.1-1.1,5.9,0.6,7.4C158.5,19.8,158.8,17.1,158.9,15.7z M168.2,15.2c0,1.8-0.3,4.2-1.9,5.4c-1.7,1.4-4.7,0.4-4.9-2
 			c-0.3-2.4-0.3-7.8,3.3-7.1C166.9,10,168.2,13.6,168.2,15.2z M166.8,15.9c0-1.2-0.2-2.7-1-3.7c-0.2,0.2-0.6,0.3-0.9,0.2l-0.2,0.1
 			c-1,2.1-1.5,5.7-0.2,7.6C166.2,19.8,166.7,17.3,166.8,15.9z`;
-			// надпись "Власний посол"
 			const svgPosolPath = `M7.7,13.5c12.5,8.3-8.4,19.3-7.1-0.8c0-2,0.1-9.4,2.9-9.4c1.8,0,1.4,0.8,0.6,2C3,9.1,2.2,21.3,6.7,22.9
 			c1.5,0,2.4-3,2.4-4.1c0.1-3-2.6-4.3-5-5.4c0.1-0.5,0.8-0.6,1.2-0.6c3.3,0,4.8-2.5,4.8-5.3C9.9,2,6.4,0.5,1.5,2.2C1.1,2.2,0,2,0,1.5
 			C0,0.5,4.5,0,5.3,0C13.2-0.4,15.2,11.5,7.7,13.5z M79.5,19.1c-0.4,5.1-7,7.1-7.5,1.2c-0.5,1.6-3.2,2.5-4.1,1c-1.5,4-6.8,3.2-6.8-1
@@ -142,7 +129,6 @@ function alpineApp() {
 			c0-1.2-0.3-3.3-1.1-4.1c-0.3,0.2-0.7,0.4-1,0.2l-0.2,0.1C113.9,18.3,116.7,28.4,118.9,17.7z M134.6,18c-0.3,1.2-1.7,4.3-2.8,4.3
 			c-1.4,0-0.3-8.6-0.3-9.3c0-0.7-0.7-0.7-1.3-0.7c-2.1,0-2.2,10.1-5.4,10.2c-1.6,0.1-1.1-4.9,0.2-4.6c0.4,0.1,0.3,0.6,0.9,0.6
 			c1.6-0.1-0.1-1.9-1-1.7c-7.5,1.6,0.1,13.3,3.7,2.8c0.3,6.2,6.7,4.4,6.8-0.8C135.2,18.2,135.1,18,134.6,18z`;
-			// иконка рыбки
 			const svgFishPath = `M49.8,15.8c0,0.4-0.3,0.8-0.8,0.8c-0.4,0-0.8-0.3-0.8-0.8c0-0.4,0.3-0.8,0.8-0.8C49.5,15,49.8,15.4,49.8,15.8z
 			M55.3,17.6l-0.1,0.2c-1.8,3-4.7,5.2-8.4,6.4c-0.3,0.8-0.7,1.7-1.5,2.7c-1,1.2-2.1,1.8-3.3,1.8c0,0-0.1,0-0.2,0
 			c-1.2,0-2.1-0.6-2.6-1c-1,0-1.9-0.5-2.4-1.2c-0.2-0.3-0.4-0.6-0.4-0.9c-0.5,0-1.1,0-1.6-0.1c-3.1-0.2-6.4-0.6-10.1-1.3
@@ -162,7 +148,6 @@ function alpineApp() {
 			c0,0,2.6,1.9,2.2,4.3l-0.2,1l0.9-0.7c0.1-0.1,2.5-2.1,2.7-5.2c3.6,0.8,7.9,1.6,12.1,1.8c0.8,0,1.6,0.1,2.3,0.1
 			c1.4,0,2.8-0.1,4.1-0.2c-0.5,0.4-1.1,0.8-1.5,1.1c-0.8,0.6-1,0.7-0.8,1c0.2,0.3,0.6,0.1,0.8,0.1c0.3-0.1,0.5,0,0.9,0.4
 			c0.3,0.3,0.7,0.7,1.3,0.7c0,0,0,0,0.1,0c0.5,0,0.9-0.3,1.4-0.9c1-1.2,1.2-2.3,1.2-3c3.9-1,6.8-2.9,8.5-5.8L53.1,16.2z`;
-			// иконка с процентом
 			const svgPercentPath = `M14.9,16.1c0.3,0.5,0.5,1.2,0.5,2.1c0,0.9-0.1,1.6-0.4,2.1c-0.3,0.5-0.7,0.7-1.3,0.7c-0.6,0-1.1-0.2-1.4-0.7
 			c-0.3-0.5-0.5-1.2-0.5-2.1c0-0.9,0.2-1.6,0.5-2.1c0.3-0.5,0.7-0.7,1.3-0.7C14.2,15.4,14.6,15.6,14.9,16.1z M15.3,6.4
 			c0.1-0.1,0.2-0.3,0.1-0.5c0,0,0,0,0,0c0,0.1-0.1,0.2-0.2,0.2c-0.1,0-0.2-0.1-0.2-0.2c0-0.1,0.1-0.2,0.2-0.2c0,0,0,0,0.1,0
@@ -179,159 +164,100 @@ function alpineApp() {
 			c-0.3,0.5-0.5,1.2-0.5,2.1c0,0.9,0.2,1.6,0.5,2.1c0.3,0.5,0.8,0.7,1.4,0.7c0.5,0,1-0.2,1.3-0.7c0.3-0.5,0.4-1.2,0.4-2.1
 			c0-0.9-0.2-1.6-0.5-2.1C29.8,25.2,29.4,24.9,28.8,24.9z`;
 
-			this.arrLog.push(`скачиваем шрифты`);
 			console.log(`скачиваем шрифты`);
-			// скачиваем шрифты
-			const objDataFontComic = await fetch(`fonts/comic.ttf`).then((res) => res.arrayBuffer());
-			const objDataFontComicBold = await fetch(`fonts/comicbd.ttf`).then((res) => res.arrayBuffer());
-			const objDataFontSanaBold = await fetch(`fonts/SanaSansAlt-Black.ttf`).then((res) => res.arrayBuffer());
+			const objDataFontComic = await fetch(`fonts/ComicSansMS.woff2`).then((res) => res.arrayBuffer());
+			const objDataFontComicBold = await fetch(`fonts/ComicSansMS-Bold.woff2`).then((res) => res.arrayBuffer());
+			const objDataFontSanaBold = await fetch(`fonts/SanaSansAlt-Black.woff2`).then((res) => res.arrayBuffer());
 
-			this.arrLog.push(`объявляем PDF документ`);
 			console.log(`объявляем PDF документ`);
-			// объявляем PDF документ
 			const pdfDoc = await PDFDocument.create();
 
-			this.arrLog.push(`регистрируем fontkit для шрифтов`);
 			console.log(`регистрируем fontkit для шрифтов`);
-			// регистрируем `fontkit` для шрифтов
 			pdfDoc.registerFontkit(fontkit);
 
-			this.arrLog.push(`встраиваем шрифт в документ`);
 			console.log(`встраиваем шрифт в документ`);
-			// встраиваем шрифт в документ
 			const objFontComic = await pdfDoc.embedFont(objDataFontComic);
 			const objFontComicBold = await pdfDoc.embedFont(objDataFontComicBold);
 			const objFontSanaBold = await pdfDoc.embedFont(objDataFontSanaBold);
 
-			this.arrLog.push(`перебераем таблицу`);
 			console.log(`перебераем таблицу`);
-			// перебераем таблицу
 			for (let i = 0; i < arrData.length; i++) {
-				// запускаем прогресс-бар
-				// this.checkProgress((i / arrData.length) * 100);
-				this.arrLog.push(`запускаем прогресс-бар, считаем процент в setTimeout`);
 				console.log(`запускаем прогресс-бар, считаем процент в setTimeout`);
 				setTimeout(() => {
 					if (i) this.checkProgress((i / arrData.length) * 100);
 				}, '1');
-				this.arrLog.push(`если весь ряд в таблице пустой, выходим из цикла`);
 				console.log(`если весь ряд в таблице пустой, выходим из цикла`);
-				// если весь ряд в таблице пустой, выходим из цикла
 				if (arrData[i][0].length === 0 && arrData[i][1].length === 0 && arrData[i][2].length === 0 && arrData[i][3].length === 0 && arrData[i][4].length === 0) continue;
-				this.arrLog.push(`добавляем первую страницу`);
 				console.log(`добавляем первую страницу`);
-				// добавляем страницу
 				const page = pdfDoc.addPage([mm(95), mm(64)]);
-				// название на ценнике
 				const strName = arrData[i][0].toUpperCase();
-				// названия размер шрифта
 				const numNameFontSize = 19;
-				// названия максимальная ширина
 				let numNameMaxWidth = 85;
-				// отступ с лева
 				let numNameX = 0;
-				// отступ с верху
 				let numNameY = 5;
-				// PLU
 				const strPlu = arrData[i][1];
-				// размер PLU
 				const numPluFontSize = 50;
-				// цена за по умолчанию
 				let strPriceFor = false;
-				// проверяем цена за из списка
 				const numPriceForId = this.arrPriceForList.indexOf(arrData[i][2]);
-				// если название совпало из списка ok, если -1 оставляем пустым
 				if (numPriceForId >= 0) strPriceFor = this.arrPriceForList[numPriceForId];
-				// размер PLU
 				const numForFontSize = 12;
-				// цвет фона
 				const strBgColor = arrData[i][3];
-				// цвет фона по умолчанию
 				let objBgColorCMYK;
-				// получаем нужный цвет
 				switch (this.arrColorsList.indexOf(strBgColor)) {
 					case 1:
 						objBgColorCMYK = objBlueCMYK;
 						break;
 					case 2:
 						objBgColorCMYK = objRedCMYK;
-						// отступ с лева для текста
 						numNameX += 6.5;
 						break;
 					default:
 						objBgColorCMYK = objBlackCMYK;
 				}
-				this.arrLog.push(`рисуем фон так как он везде должен быть`);
 				console.log(`рисуем фон так как он везде должен быть`);
-				// рисуем фон так как он везде должен быть
 				page.drawSvgPath(svgBackgroundPath, { color: objBgColorCMYK, x: 0, y: page.getHeight() });
-				this.arrLog.push(`получаю тип макета`);
 				console.log(`получаю тип макета`);
-				// тип макета
 				const strLayout = arrData[i][4];
-				// тип макета по умолчанию
 				let numLayout;
-				this.arrLog.push(`тип макета в switch`);
 				console.log(`тип макета в switch`);
-				// тип макета выбранный
 				switch (this.arrLayoutList.indexOf(strLayout)) {
 					case 0:
 						numLayout = 0;
-						this.arrLog.push(`если 0`);
 						console.log(`если 0`);
-						// рисуем процент если был отступ
 						if (numNameX) page.drawSvgPath(svgPercentPath, { color: objYellowCMYK, x: page.getWidth() - mm(93.1), y: page.getHeight() - mm(1.8) });
-						// отступ с лева для текста
 						numNameX += 1.8;
 						break;
 					case 1:
-						this.arrLog.push(`если 1`);
 						console.log(`если 1`);
 						numLayout = 1;
-						// рисуем "Власне виробництво"
 						page.drawSvgPath(svgProductionPath, { color: objWhiteCMYK, x: page.getWidth() - mm(77.1 - numNameX), y: page.getHeight() - mm(3.3) });
-						// рисуем процент если был отступ
 						if (numNameX) page.drawSvgPath(svgPercentPath, { color: objYellowCMYK, x: page.getWidth() - mm(93.1), y: page.getHeight() - mm(1.8) });
-						// отступ с верху для текста
 						numNameY += 8.5;
 						break;
 					case 2:
-						this.arrLog.push(`если 2`);
 						console.log(`если 2`);
 						numLayout = 2;
-						// рисуем "Власне виробництво (риба)"
 						page.drawSvgPath(svgProductionPath, { color: objWhiteCMYK, x: page.getWidth() - mm(89.6 - numNameX * 3), y: page.getHeight() - mm(3.3) });
-						// рисуем иконку рыбы если отступов не было
 						if (!numNameX) page.drawSvgPath(svgFishPath, { color: objWhiteCMYK, x: page.getWidth() - mm(27), y: page.getHeight() - mm(2.3) });
 						else page.drawSvgPath(svgPercentPath, { color: objYellowCMYK, x: page.getWidth() - mm(93.1), y: page.getHeight() - mm(1.8) });
-						// отступ с верху для текста
 						numNameY += 8.5;
 						break;
 					case 3:
-						this.arrLog.push(`если 3`);
 						console.log(`если 3`);
 						numLayout = 3;
-						// рисуем "Власний посол"
 						page.drawSvgPath(svgPosolPath, { color: objWhiteCMYK, x: page.getWidth() - mm(83.9 - numNameX * 3), y: page.getHeight() - mm(2.7) });
-						// рисуем иконку рыбы если отступов не было
 						if (!numNameX) page.drawSvgPath(svgFishPath, { color: objWhiteCMYK, x: page.getWidth() - mm(27), y: page.getHeight() - mm(2.3) });
 						else page.drawSvgPath(svgPercentPath, { color: objYellowCMYK, x: page.getWidth() - mm(93.1), y: page.getHeight() - mm(1.8) });
-						// отступ с верху для текста
 						numNameY += 8;
 						break;
 					default:
-						this.arrLog.push(`default`);
 						console.log(`default`);
 						numLayout = 0;
-						// рисуем процент если был отступ
 						if (numNameX) page.drawSvgPath(svgPercentPath, { color: objYellowCMYK, x: page.getWidth() - mm(93.1), y: page.getHeight() - mm(1.8) });
 				}
 
-				// console.log(`Название: ${strName}; PLU: ${strPlu}; Цена за: ${strFor}; Цвет: ${objBgColorCMYK}; Макет: ${numLayout}`);
 
-				this.arrLog.push(`пишем название`);
 				console.log(`пишем название`);
-				// пишем название
 				wrapText(strName, mm(numNameMaxWidth - numNameX), objFontComicBold, numNameFontSize).forEach(function (item, i, arr) {
 					const textWidth = objFontComicBold.widthOfTextAtSize(item, numNameFontSize);
 					const textHeight = objFontComicBold.heightAtSize(numNameFontSize);
@@ -343,11 +269,8 @@ function alpineApp() {
 						maxWidth: mm(numNameMaxWidth - numNameX),
 						color: objWhiteCMYK,
 					});
-					// console.log(i + ': ' + item + ' (массив:' + arr + ')');
 				});
 
-				this.arrLog.push(`пишем цену за`);
-				// пишем цену за
 				if (strPriceFor) {
 					const textWidth2 = objFontComicBold.widthOfTextAtSize(strPriceFor, 12);
 					page.drawText(strPriceFor, {
@@ -359,16 +282,10 @@ function alpineApp() {
 					});
 				}
 
-				this.arrLog.push(`добавляем вторую страницу (оборот)`);
-				// добавляем страницу
 				const page2 = pdfDoc.addPage([mm(95), mm(64)]);
 
-				this.arrLog.push(`рисуем фон так как он везде должен быть`);
-				// рисуем фон так как он везде должен быть
 				page2.drawSvgPath(svgBackgroundPath, { color: objBgColorCMYK, x: 0, y: page2.getHeight() });
 
-				this.arrLog.push(`пишем PLU`);
-				// пишем PLU
 				page2.drawText('plu:', {
 					x: page2.getWidth() - mm(90),
 					y: page2.getHeight() - mm(19.8),
@@ -377,8 +294,6 @@ function alpineApp() {
 					color: objWhiteCMYK,
 				});
 
-				this.arrLog.push(`пишем номер PLU`);
-				// пишем номер PLU
 				page2.drawText(strPlu, {
 					x: page2.getWidth() - mm(74),
 					y: page2.getHeight() - mm(19.8),
@@ -388,33 +303,17 @@ function alpineApp() {
 				});
 			}
 
-			this.arrLog.push(`сохранение для скачивания`);
-			// сохранение для скачивания
 			const pdfBytes = await pdfDoc.save();
 
-			this.arrLog.push(`триггер скачивания для браузера`);
-			// триггер скачивания для браузера
 			download(pdfBytes, 'pdf-lib_modification_example.pdf', 'application/pdf');
-			this.arrLog.push(`создаем blob для кнопки`);
-			// создаем blob для кнопки
 			const blob = new Blob([pdfBytes], { type: 'application/pdf' });
-			this.arrLog.push(`передаем в ссылку и активируем кнопку`);
-			// передаем в ссылку и активируем кнопку
 			this.strDownloadFileUrl = window.URL.createObjectURL(blob);
 			this.boolDownloadBtn = true;
 
-			this.arrLog.push(`закрываем прогресс-бар`);
-			// закрываем прогресс-бар
 			if (pdfBytes) this.checkProgress(0);
 			this.openProgress = false;
 
-			// сохраняем в Base64 для вывода на странице
-			// const pdfDataUri = await pdfDoc.saveAsBase64({
-			// 	dataUri: true,
-			// });
 
-			// вставляем PDF в элемент для предпросмотр
-			// this.srcPDF = pdfDataUri;
 		},
 		boolDownloadBtn: false,
 		strDownloadFileUrl: ``,
@@ -428,7 +327,6 @@ function alpineApp() {
 				this.boolDownloadBtn = false;
 				this.arrLog = false;
 			} else {
-				// пользователь нажал "Отмена"
 			}
 		},
 	};
@@ -444,10 +342,8 @@ document.addEventListener('alpine:init', () => {
 		objCommentsCell: Alpine.$persist({}),
 	});
 
-	// регулярные выражения для проверки
 	const regPlu = /^\d{1,6}$/;
 
-	// создаем таблицу
 	Alpine.store('app').sheet = jspreadsheet(document.getElementById('spreadsheet'), {
 		data: Alpine.store('app').data,
 		minDimensions: [5, 10],
@@ -458,7 +354,6 @@ document.addEventListener('alpine:init', () => {
 			{ type: 'dropdown', title: 'Колір фону', width: 120, source: Alpine.store('app').colorsList },
 			{ type: 'dropdown', title: 'Макет', width: 200, source: Alpine.store('app').layoutList },
 		],
-		// minDimensions: [11,11],
 		columnSorting: false,
 		allowInsertRow: true,
 		allowInsertColumn: false,
@@ -508,32 +403,18 @@ document.addEventListener('alpine:init', () => {
 			}
 		},
 		onchange: function (instance, cell, x, y, value) {
-			// console.log(x, y, value);
-			// cell.style.fontWeight = 'bold';
-			// cell.style.backgroundColor = '#ffd1d1';
-			// console.log(jexcel.getColumnNameFromId([x, y]));
-			// this.setComments(jexcel.getColumnNameFromId([x, y]), 'Помилка!');
-			// Alpine.store('settings').errors += 1;
-			// Alpine.store('app').objStyleCell = { A2: 'background-color: orange;' };
 
-			// координаты Excel
 			let strExcelCoords = jexcel.getColumnNameFromId([x, y]);
 
-			// обновленное значение ячейки
 			let updatedValue = value.toString().trim();
 
-			// если ячейка пустая, окрашиваем ее
 			if (updatedValue.length) {
-				// console.log(`Не пустая ` + x, y, updatedValue);
 
-				// если название
 				if (x == 0) {
 					updatedValue = updatedValue.toUpperCase();
 				}
 
-				// если PLU
 				if (x == 1) {
-					// если PLU прошел проверку
 					if (regPlu.test(updatedValue)) {
 						this.setComments(strExcelCoords, ``);
 						cell.style.backgroundColor = ``;
@@ -543,9 +424,7 @@ document.addEventListener('alpine:init', () => {
 					}
 				}
 
-				// проверка 'Ціна за'
 				if (x == 2) {
-					// проверяем значение из предоставленного списка
 					let numPriceForId = Alpine.store('app').priceForList.indexOf(value);
 					if (numPriceForId < 0) {
 						this.setComments(strExcelCoords, `"Ціна за" не обрана або не із переліку варіантів!`);
@@ -556,9 +435,7 @@ document.addEventListener('alpine:init', () => {
 					}
 				}
 
-				// проверка цвета
 				if (x == 3) {
-					// проверяем значение из предоставленного списка
 					let numColorsListId = Alpine.store('app').colorsList.indexOf(value);
 					if (numColorsListId < 0) {
 						this.setComments(strExcelCoords, `Колір фону не обрано або не із переліку варіантів!`);
@@ -569,9 +446,7 @@ document.addEventListener('alpine:init', () => {
 					}
 				}
 
-				// проверка макета
 				if (x == 4) {
-					// проверяем значение из предоставленного списка
 					let numLayoutListId = Alpine.store('app').layoutList.indexOf(value);
 					if (numLayoutListId < 0) {
 						this.setComments(strExcelCoords, `Макет цінника не обрано або не із переліку варіантів!`);
@@ -582,72 +457,47 @@ document.addEventListener('alpine:init', () => {
 					}
 				}
 			} else {
-				// console.log(`Пустая ` + x, y, updatedValue);
 
 				this.setComments(strExcelCoords, ``);
 				cell.style.backgroundColor = ``;
 			}
 
-			// обновляем значение в ячейке, если оно не совпадает
 			if (value !== updatedValue) this.setValue(strExcelCoords, updatedValue, false);
 
-			// обновляем вывод ошибок
 			Alpine.store('app').objStyleCell = this.getStyle();
 			Alpine.store('app').objCommentsCell = this.getComments();
 		},
 		onbeforepaste: () => {
-			// jSuites.loading.show();
-			// console.log(`Start`);
 		},
 		onpaste: () => {
-			// jSuites.loading.hide();
-			// console.log(`End`);
 		},
 		style: Alpine.store('app').objStyleCell,
 	});
 });
 
-// преобразившем в миллиметры
 function mm(number) {
 	return number * 2.83465;
 }
 
-// разбиваем текст на строки
 function wrapText(strWholeLine, numMaxWidth, objFont, numFontSize) {
-	// ищем уникалльный символ разрыва строки в слове
 	const arrWordsBreak = strWholeLine.split('\\');
-	// текущая строка
 	let strLineResult = ``;
-	// массив с результатом
 	const arrResult = [];
-	// перебираем строки с пренудительным переносом
 	for (const strLine of arrWordsBreak) {
-		// разбиваем строку на слова
 		const arrWords = strLine.split(' ');
-		// перебираем слова
 		for (const strWord of arrWords) {
-			// создаем временную строку
 			let strLineTest = strLineResult + strWord + ' ';
-			// меряем строку
 			const numWidthTest = objFont.widthOfTextAtSize(strLineTest, numFontSize);
-			// если ширина тестовой строки больше разрешенной ширины
 			if (numWidthTest > numMaxWidth) {
-				// в результат масса уходит предыдущая строка
 				arrResult.push(strLineResult);
-				// создаем новую строку с словом которое не влезло
 				strLineResult = strWord + ' ';
 			} else {
-				// если ширина менше максимальной, тестовая строка остается в текущей
 				strLineResult = strLineTest;
 			}
 		}
-		// если слов в строке больше нет, добавляем в результат
 		arrResult.push(strLineResult);
-		// очищаем переменную для просчета новой строки
 		strLineResult = ``;
 	}
-	// если слов больше нет добавляем в результат последнюю или единственную строку
 	arrResult.push(strLineResult);
-	// возвращаем результат
 	return arrResult;
 }
