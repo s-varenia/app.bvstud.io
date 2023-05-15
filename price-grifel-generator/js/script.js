@@ -26,8 +26,6 @@ if(!jSuites&&"function"==typeof require){var jSuites=require("jsuites");require(
 
 (()=>{function g(n){n.directive("collapse",e),e.inline=(t,{modifiers:i})=>{i.includes("min")&&(t._x_doShow=()=>{},t._x_doHide=()=>{})};function e(t,{modifiers:i}){let r=l(i,"duration",250)/1e3,u=l(i,"min",0),h=!i.includes("min");t._x_isShown||(t.style.height=`${u}px`),!t._x_isShown&&h&&(t.hidden=!0),t._x_isShown||(t.style.overflow="hidden");let c=(d,s)=>{let o=n.setStyles(d,s);return s.height?()=>{}:o},f={transitionProperty:"height",transitionDuration:`${r}s`,transitionTimingFunction:"cubic-bezier(0.4, 0.0, 0.2, 1)"};t._x_transition={in(d=()=>{},s=()=>{}){h&&(t.hidden=!1),h&&(t.style.display=null);let o=t.getBoundingClientRect().height;t.style.height="auto";let a=t.getBoundingClientRect().height;o===a&&(o=u),n.transition(t,n.setStyles,{during:f,start:{height:o+"px"},end:{height:a+"px"}},()=>t._x_isShown=!0,()=>{t.getBoundingClientRect().height==a&&(t.style.overflow=null)})},out(d=()=>{},s=()=>{}){let o=t.getBoundingClientRect().height;n.transition(t,c,{during:f,start:{height:o+"px"},end:{height:u+"px"}},()=>t.style.overflow="hidden",()=>{t._x_isShown=!1,t.style.height==`${u}px`&&h&&(t.style.display="none",t.hidden=!0)})}}}}function l(n,e,t){if(n.indexOf(e)===-1)return t;let i=n[n.indexOf(e)+1];if(!i)return t;if(e==="duration"){let r=i.match(/([0-9]+)ms/);if(r)return r[1]}if(e==="min"){let r=i.match(/([0-9]+)px/);if(r)return r[1]}return i}document.addEventListener("alpine:init",()=>{window.Alpine.plugin(g)});})();
 
-(()=>{function I(t){let l=document.createElement("template");return l.innerHTML=t,l.content.firstElementChild}function P(t){return t.nodeType===3||t.nodeType===8}var a={replace(t,l,d){let s=t.indexOf(l);if(s===-1)throw"Cant find element in children";return l.replaceWith(d),t[s]=d,t},before(t,l,d){let s=t.indexOf(l);if(s===-1)throw"Cant find element in children";return l.before(d),t.splice(s,0,d),t},append(t,l,d){let s=t[t.length-1];return d(l),t.push(l),t},remove(t,l){if(t.indexOf(l)===-1)throw"Cant find element in children";return l.remove(),t.filter(s=>s!==l)},first(t){return this.teleportTo(t[0])},next(t,l){let d=t.indexOf(l);if(d!==-1)return this.teleportTo(this.teleportBack(t[d+1]))},teleportTo(t){return t&&(t._x_teleport?t._x_teleport:t)},teleportBack(t){return t&&(t._x_teleportBack?t._x_teleportBack:t)}};var Q=()=>{},U=()=>{};function N(t,l,d){Y();let s,_,b,D,L,h,S,O,v,T;function z(e={}){let n=p=>p.getAttribute("key"),u=()=>{};L=e.updating||u,h=e.updated||u,S=e.removing||u,O=e.removed||u,v=e.adding||u,T=e.added||u,b=e.key||n,D=e.lookahead||!1}function M(e,n){if(G(e,n))return H(e,n);let u=!1;if(!g(L,e,n,()=>u=!0)){if(window.Alpine&&X(e,n,()=>u=!0),P(n)){R(e,n),h(e,n);return}u||W(e,n),h(e,n),V(Array.from(e.childNodes),Array.from(n.childNodes),p=>{e.appendChild(p)})}}function G(e,n){return e.nodeType!=n.nodeType||e.nodeName!=n.nodeName||A(e)!=A(n)}function H(e,n){if(g(S,e))return;let u=n.cloneNode(!0);g(v,u)||(a.replace([e],e,u),O(e),T(u))}function R(e,n){let u=n.nodeValue;e.nodeValue!==u&&(e.nodeValue=u)}function W(e,n){if(e._x_isShown&&!n._x_isShown||!e._x_isShown&&n._x_isShown)return;let u=Array.from(e.attributes),p=Array.from(n.attributes);for(let f=u.length-1;f>=0;f--){let r=u[f].name;n.hasAttribute(r)||e.removeAttribute(r)}for(let f=p.length-1;f>=0;f--){let r=p[f].name,i=p[f].value;e.getAttribute(r)!==i&&e.setAttribute(r,i)}}function V(e,n,u){let p={},f={},r=a.first(n),i=a.first(e);for(;r;){let x=A(r),y=A(i);if(!i)if(x&&f[x]){let o=f[x];e=a.append(e,o,u),i=o}else{if(!g(v,r)){let o=r.cloneNode(!0);e=a.append(e,o,u),T(o)}r=a.next(n,r);continue}let E=o=>o.nodeType===8&&o.textContent===" __BLOCK__ ",m=o=>o.nodeType===8&&o.textContent===" __ENDBLOCK__ ";if(E(r)&&E(i)){let o=[],k,w=0;for(;i;){let c=a.next(e,i);if(E(c))w++;else if(m(c)&&w>0)w--;else if(m(c)&&w===0){i=a.next(e,c),k=c;break}o.push(c),i=c}let F=[];for(w=0;r;){let c=a.next(n,r);if(E(c))w++;else if(m(c)&&w>0)w--;else if(m(c)&&w===0){r=a.next(n,c);break}F.push(c),r=c}V(o,F,c=>k.before(c));continue}if(i.nodeType===1&&D){let o=a.next(n,r),k=!1;for(;!k&&o;)i.isEqualNode(o)&&(k=!0,[e,i]=K(e,r,i),y=A(i)),o=a.next(n,o)}if(x!==y){if(!x&&y){f[y]=i,[e,i]=K(e,r,i),e=a.remove(e,f[y]),i=a.next(e,i),r=a.next(n,r);continue}if(x&&!y&&p[x]&&(e=a.replace(e,i,p[x]),i=p[x]),x&&y){let o=p[x];if(o)f[y]=i,e=a.replace(e,i,o),i=o;else{f[y]=i,[e,i]=K(e,r,i),e=a.remove(e,f[y]),i=a.next(e,i),r=a.next(n,r);continue}}}let J=i&&a.next(e,i);M(i,r),r=r&&a.next(n,r),i=J}let B=[];for(;i;)g(S,i)||B.push(i),i=a.next(e,i);for(;B.length;){let x=B.shift();x.remove(),O(x)}}function A(e){return e&&e.nodeType===1&&b(e)}function Z(e){let n={};return e.forEach(u=>{let p=A(u);p&&(n[p]=u)}),n}function K(e,n,u){if(!g(v,n)){let p=n.cloneNode(!0);return e=a.before(e,u,p),T(p),[e,p]}return[e,n]}return z(d),s=t,_=typeof l=="string"?I(l):l,window.Alpine&&window.Alpine.closestDataStack&&!t._x_dataStack&&(_._x_dataStack=window.Alpine.closestDataStack(t),_._x_dataStack&&window.Alpine.clone(t,_)),M(t,_),s=void 0,_=void 0,t}N.step=()=>Q();N.log=t=>{U=t};function g(t,...l){let d=!1;return t(...l,()=>d=!0),d}function X(t,l,d){t.nodeType===1&&t._x_dataStack&&window.Alpine.clone(t,l)}var $=!1;function Y(){if($)return;$=!0;let t=Element.prototype.setAttribute,l=document.createElement("div");Element.prototype.setAttribute=function(s,_){if(!s.includes("@"))return t.call(this,s,_);l.innerHTML=`<span ${s}="${_}"></span>`;let b=l.firstElementChild.getAttributeNode(s);l.firstElementChild.removeAttributeNode(b),this.setAttributeNode(b)}}function q(t){t.morph=N}document.addEventListener("alpine:init",()=>{window.Alpine.plugin(q)});})();
-
 
 const { PDFDocument, cmyk } = PDFLib;
 
@@ -51,15 +49,11 @@ function alpineApp() {
 			else this.numProgress = 0;
 		},
 		async createPdf() {
-			console.log(`получаю данные из таблицы`);
 			const arrData = this.objSheet.getData();
 
-			console.log(`проверяю таблицу на пустую`);
 			if (arrData.map((row) => row.join(``)).join(``).length === 0) return;
 
-			console.log(`активируем прогресс-бар`);
 			this.numProgress = 1;
-			console.log(`открываем прогресс-бар через время, если он все еще будет нужен`);
 			setTimeout(() => {
 				if (this.numProgress > 0) this.openProgress = true;
 			}, '500');
@@ -69,7 +63,6 @@ function alpineApp() {
 			const objRedCMYK = cmyk(0, 1, 1, 0);
 			const objYellowCMYK = cmyk(0, 0.16, 1, 0);
 
-			console.log(`объявляю используемые кривые в макете`);
 			const svgBackgroundPath = `M255.1,181.4H14.2c-7.8,0-14.2-6.3-14.2-14.2V14.2C0,6.3,6.3,0,14.2,0h240.9c7.8,0,14.2,6.3,14.2,14.2v153.1C269.3,175.1,262.9,181.4,255.1,181.4z`;
 			const svgProductionPath = `M10.6,3.9c1.3,3.1-0.2,7.4-3.7,8.2c11.8,7.3-9.8,19.6-6-5.6C1,4.9,2.5,1.7,4.3,3.5C4,4.4,3.4,5,3.3,6
 			c-2.5,25.9,11.5,9.6,0.8,6.3l-0.4-0.3C4.2,11,6,11.7,6.7,11c3.4-1.7,2.9-7.2,0-9.2c-2-1.7-5,1.4-6.7-0.4C3-1.1,9.3-0.2,10.6,3.9z
@@ -164,31 +157,23 @@ function alpineApp() {
 			c-0.3,0.5-0.5,1.2-0.5,2.1c0,0.9,0.2,1.6,0.5,2.1c0.3,0.5,0.8,0.7,1.4,0.7c0.5,0,1-0.2,1.3-0.7c0.3-0.5,0.4-1.2,0.4-2.1
 			c0-0.9-0.2-1.6-0.5-2.1C29.8,25.2,29.4,24.9,28.8,24.9z`;
 
-			console.log(`скачиваем шрифты`);
 			const objDataFontComic = await fetch(`fonts/comic.ttf`).then((res) => res.arrayBuffer());
 			const objDataFontComicBold = await fetch(`fonts/comicbd.ttf`).then((res) => res.arrayBuffer());
 			const objDataFontSanaBold = await fetch(`fonts/SanaSansAlt-Black.ttf`).then((res) => res.arrayBuffer());
 
-			console.log(`объявляем PDF документ`);
 			const pdfDoc = await PDFDocument.create();
 
-			console.log(`регистрируем fontkit для шрифтов`);
 			pdfDoc.registerFontkit(fontkit);
 
-			console.log(`встраиваем шрифт в документ`);
 			const objFontComic = await pdfDoc.embedFont(objDataFontComic);
 			const objFontComicBold = await pdfDoc.embedFont(objDataFontComicBold);
 			const objFontSanaBold = await pdfDoc.embedFont(objDataFontSanaBold);
 
-			console.log(`перебераем таблицу`);
 			for (let i = 0; i < arrData.length; i++) {
-				console.log(`запускаем прогресс-бар, считаем процент в setTimeout`);
 				setTimeout(() => {
 					if (i) this.checkProgress((i / arrData.length) * 100);
 				}, '1');
-				console.log(`если весь ряд в таблице пустой, выходим из цикла`);
 				if (arrData[i][0].length === 0 && arrData[i][1].length === 0 && arrData[i][2].length === 0 && arrData[i][3].length === 0 && arrData[i][4].length === 0) continue;
-				console.log(`добавляем первую страницу`);
 				const page = pdfDoc.addPage([mm(95), mm(64)]);
 				const strName = arrData[i][0].toUpperCase();
 				const numNameFontSize = 19;
@@ -214,28 +199,22 @@ function alpineApp() {
 					default:
 						objBgColorCMYK = objBlackCMYK;
 				}
-				console.log(`рисуем фон так как он везде должен быть`);
 				page.drawSvgPath(svgBackgroundPath, { color: objBgColorCMYK, x: 0, y: page.getHeight() });
-				console.log(`получаю тип макета`);
 				const strLayout = arrData[i][4];
 				let numLayout;
-				console.log(`тип макета в switch`);
 				switch (this.arrLayoutList.indexOf(strLayout)) {
 					case 0:
 						numLayout = 0;
-						console.log(`если 0`);
 						if (numNameX) page.drawSvgPath(svgPercentPath, { color: objYellowCMYK, x: page.getWidth() - mm(93.1), y: page.getHeight() - mm(1.8) });
 						numNameX += 1.8;
 						break;
 					case 1:
-						console.log(`если 1`);
 						numLayout = 1;
 						page.drawSvgPath(svgProductionPath, { color: objWhiteCMYK, x: page.getWidth() - mm(77.1 - numNameX), y: page.getHeight() - mm(3.3) });
 						if (numNameX) page.drawSvgPath(svgPercentPath, { color: objYellowCMYK, x: page.getWidth() - mm(93.1), y: page.getHeight() - mm(1.8) });
 						numNameY += 8.5;
 						break;
 					case 2:
-						console.log(`если 2`);
 						numLayout = 2;
 						page.drawSvgPath(svgProductionPath, { color: objWhiteCMYK, x: page.getWidth() - mm(89.6 - numNameX * 3), y: page.getHeight() - mm(3.3) });
 						if (!numNameX) page.drawSvgPath(svgFishPath, { color: objWhiteCMYK, x: page.getWidth() - mm(27), y: page.getHeight() - mm(2.3) });
@@ -243,7 +222,6 @@ function alpineApp() {
 						numNameY += 8.5;
 						break;
 					case 3:
-						console.log(`если 3`);
 						numLayout = 3;
 						page.drawSvgPath(svgPosolPath, { color: objWhiteCMYK, x: page.getWidth() - mm(83.9 - numNameX * 3), y: page.getHeight() - mm(2.7) });
 						if (!numNameX) page.drawSvgPath(svgFishPath, { color: objWhiteCMYK, x: page.getWidth() - mm(27), y: page.getHeight() - mm(2.3) });
@@ -251,13 +229,11 @@ function alpineApp() {
 						numNameY += 8;
 						break;
 					default:
-						console.log(`default`);
 						numLayout = 0;
 						if (numNameX) page.drawSvgPath(svgPercentPath, { color: objYellowCMYK, x: page.getWidth() - mm(93.1), y: page.getHeight() - mm(1.8) });
 				}
 
 
-				console.log(`пишем название`);
 				wrapText(strName, mm(numNameMaxWidth - numNameX), objFontComicBold, numNameFontSize).forEach(function (item, i, arr) {
 					const textWidth = objFontComicBold.widthOfTextAtSize(item, numNameFontSize);
 					const textHeight = objFontComicBold.heightAtSize(numNameFontSize);
