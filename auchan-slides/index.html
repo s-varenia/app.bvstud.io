@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link rel="icon" type="image/png" href="img/favicon-256.png" />
+		<title>Генератор каталогів</title>
+		<style>
+			#loading.spinner {
+				left: 50%;
+				margin-left: -20px;
+				top: 50%;
+				margin-top: -20px;
+				position: absolute;
+				z-index: 19 !important;
+				animation: loading-bar-spinner 400ms linear infinite;
+			}
+
+			#loading.spinner .spinner-icon {
+				width: 40px;
+				height: 40px;
+				border: solid 4px transparent;
+				border-top-color: #0d6efd !important;
+				border-left-color: #0d6efd !important;
+				border-radius: 50%;
+			}
+
+			@keyframes loading-bar-spinner {
+				0% {
+					transform: rotate(0deg);
+					transform: rotate(0deg);
+				}
+				100% {
+					transform: rotate(360deg);
+					transform: rotate(360deg);
+				}
+			}
+		</style>
+	</head>
+	<body>
+		<div id="loading" class="spinner"><div class="spinner-icon"></div></div>
+		<iframe src="https://script.google.com/macros/s/AKfycbwng8Nh0XIvDv9-oL6jgFaMOIPZNWXfPia3W65eOeFxVxD6KoboCSM5Lyu5wwbvK0eMkg/exec" style="position: fixed; top: 0; left: 0; bottom: 0; right: 0; width: 100%; height: 100%; border: none; margin: 0; padding: 0; overflow: hidden; z-index: 999999"></iframe>
+		<script>
+			window.addEventListener('load', (event) => {
+				document.getElementById('loading').remove();
+				console.log('Page is fully loaded');
+			});
+		</script>
+	</body>
+</html>
