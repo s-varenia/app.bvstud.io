@@ -102,9 +102,12 @@
 		<script>
 			window.addEventListener('load', (event) => {
 				document.getElementById('loading').remove();
-				if(localStorage.getItem("boolUserExisted")){
+				if(sessionStorage.getItem("boolUserExisted")){
 					document.getElementById('iframeWindow').style.display = 'block';
+					document.getElementById('keyButton').style.display = 'block';
+					setTimeout(function(){document.getElementById('keyButton').remove();},5000);
 				}else{
+					document.getElementById('keyButton').style.display = 'none';
 					document.getElementById('ifNotLoggedIn').style.display = 'block';
 				}
 				console.log('Page is fully loaded');
@@ -112,8 +115,8 @@
 
 			function handleCredentialResponse(response) {
 				if(response!==undefined && response.credential!==undefined){
-					localStorage.clear();
-					localStorage.setItem("boolUserExisted",true);
+					sessionStorage.clear();
+					sessionStorage.setItem("boolUserExisted",true);
 					location.reload();
 				}
 			}
@@ -127,6 +130,7 @@
 		   data-callback="handleCredentialResponse">
 		</div>
 		<div class="g_id_signin"
+		   id="keyButton"
 		   data-type="standard"
 		   data-size="large"
 		   data-theme="outline"
@@ -134,13 +138,24 @@
 		   data-shape="pill"
 		   data-logo_alignment="left"
 		   data-locale="uk_UA"
-		   style="position: absolute;z-index: 999999;">
+		   style="position: absolute;z-index: 9999999;display: none;">
 		</div>
 
 		<div class="first-massage">
 			<div id="ifNotLoggedIn" class="first-massage__body" style="display: none">
 				<h1 class="first-massage__title">Авторизуйтесь за допомогою Google</h1>
 				<p class="first-massage__text">Для продовження роботи з інструментом увійдіть до свого аккаунту Google</p>
+				<div style="display: flex;justify-content: center;">
+					<div class="g_id_signin"
+						data-type="standard"
+						data-size="large"
+						data-theme="outline"
+						data-shape="pill"
+						data-logo_alignment="left"
+						data-locale="uk_UA"
+						style="">
+					</div>
+				</div>
 				<p class="first-massage__text first-massage__text_small">* Оновіть цю сторінку якщо ви вже увійшли до свого аккаунту Google</p>
 				<p class="first-massage__text first-massage__text_small">** Ми використовуємо файли cookie, для роботи інструменту. Інструмент не буде працювати якщо cookie вимкнені. Якщо ви продовжуєте використовувати цей сайт, ви погоджуєтеся на використання файлів cookie.</p>
 			</div>
