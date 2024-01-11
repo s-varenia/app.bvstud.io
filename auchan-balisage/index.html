@@ -38,128 +38,15 @@
 					transform: rotate(360deg);
 				}
 			}
-
-			.first-massage {
-				display: flex;
-				justify-content: center;
-				position: relative;
-				z-index: 20 !important;
-			}
-
-			.first-massage__body {
-				border: solid 1px #e9ecef;
-				border-radius: 6px;
-				padding: 2rem;
-				margin-top: 50px;
-				background-color: #fcfcfd;
-				text-align: center;
-				max-width: 760px;
-			}
-
-			.first-massage__title {
-				font-size: 1.4rem;
-				font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', 'Noto Sans', 'Liberation Sans', Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
-				margin-top: 0;
-				margin-bottom: 0.5rem;
-				font-weight: 500;
-				line-height: 1.2;
-				color: rgb(33, 37, 41);
-			}
-			.first-massage__text {
-				font-size: 1.15rem;
-				font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', 'Noto Sans', 'Liberation Sans', Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
-				font-weight: 400;
-				display: block;
-				margin-block-start: 1em;
-				margin-block-end: 1em;
-				margin-inline-start: 0px;
-				margin-inline-end: 0px;
-			}
-			.first-massage__text_small {
-				font-size: 0.8rem;
-				font-weight: 500;
-			}
-
-			.first-massage__btn {
-				border: 0;
-				border-radius: 6px;
-				padding: 8px 16px;
-				margin: 4px 2px;
-				box-sizing: border-box;
-				cursor: pointer;
-				display: inline-block;
-				font-size: 1.15rem;
-				font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', 'Noto Sans', 'Liberation Sans', Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
-				font-weight: 400;
-				background-color: #0d6efd;
-				color: #fff;
-			}
-
-			.first-massage__btn:hover {
-				background-color: #0b5ed7;
-			}
 		</style>
 		<script>
 			window.addEventListener('load', (event) => {
 				document.getElementById('loading').remove();
-				if(sessionStorage.getItem("boolUserExisted")){
-					document.getElementById('iframeWindow').style.display = 'block';
-					document.getElementById('keyButton').style.display = 'block';
-					setTimeout(function(){document.getElementById('keyButton').remove();},5000);
-				}else{
-					document.getElementById('keyButton').style.display = 'none';
-					document.getElementById('ifNotLoggedIn').style.display = 'block';
-				}
-				console.log('Page is fully loaded');
+				document.getElementById('iframeWindow').style.display = 'block';
 			});
-
-			function handleCredentialResponse(response) {
-				if(response!==undefined && response.credential!==undefined){
-					sessionStorage.clear();
-					sessionStorage.setItem("boolUserExisted",true);
-					location.reload();
-				}
-			}
 		</script>
 	</head>
 	<body>
-		<script src="https://accounts.google.com/gsi/client" async defer></script>
-		<div id="g_id_onload"
-		   data-client_id="532589210812-k8b14qregfn1dltt2n4iamu3uf7er3gg.apps.googleusercontent.com"
-		   data-auto_prompt="false"
-		   data-callback="handleCredentialResponse">
-		</div>
-		<div class="g_id_signin"
-		   id="keyButton"
-		   data-type="standard"
-		   data-size="large"
-		   data-theme="outline"
-		   data-text="continue_with"
-		   data-shape="pill"
-		   data-logo_alignment="left"
-		   data-locale="uk_UA"
-		   style="position: absolute;z-index: 9999999;display: none;">
-		</div>
-
-		<div class="first-massage">
-			<div id="ifNotLoggedIn" class="first-massage__body" style="display: none">
-				<h1 class="first-massage__title">Авторизуйтесь за допомогою Google</h1>
-				<p class="first-massage__text">Для продовження роботи з інструментом увійдіть до свого аккаунту Google</p>
-				<div style="display: flex;justify-content: center;">
-					<div class="g_id_signin"
-						data-type="standard"
-						data-size="large"
-						data-theme="outline"
-						data-shape="pill"
-						data-logo_alignment="left"
-						data-locale="uk_UA"
-						style="">
-					</div>
-				</div>
-				<p class="first-massage__text first-massage__text_small">* Оновіть цю сторінку якщо ви вже увійшли до свого аккаунту Google</p>
-				<p class="first-massage__text first-massage__text_small">** Ми використовуємо файли cookie, для роботи інструменту. Інструмент не буде працювати якщо cookie вимкнені. Якщо ви продовжуєте використовувати цей сайт, ви погоджуєтеся на використання файлів cookie.</p>
-			</div>
-		</div>
 		<div id="loading" class="spinner"><div class="spinner-icon"></div></div>
 
 		<iframe id="iframeWindow" src="https://script.google.com/macros/s/AKfycbwfgJCPtLM96czVNpUqhbQ49VUk306_t6tuGU4DG7fGhv3Izc31Bruy0_jp4G5uwY1I/exec" style="display: none; position: fixed; top: 0; left: 0; bottom: 0; right: 0; width: 100%; height: 100%; border: none; margin: 0; padding: 0; overflow: hidden; z-index: 99999"></iframe>
