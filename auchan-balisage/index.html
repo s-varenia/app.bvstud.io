@@ -7,7 +7,7 @@
 		<meta http-equiv="Expires" content="0" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<link rel="icon" type="image/png" href="img/favicon-256.png" />
-		<title>Генератор цінників - pdf</title>
+		<title>Генератор цінників</title>
 		<style>
 			#loading.spinner {
 				left: 50%;
@@ -53,7 +53,7 @@
 				objIframe.onload = ()=>{
 					document.getElementById('loading').remove();
 					document.getElementById('iframeWindow').style.display = 'block';
-					if(strCode!==''){window.close()}
+					if(strCode!==''){setTimeout(() => {window.close();}, 5000);}
 				};
 				document.body.appendChild(objIframe);
 			});
