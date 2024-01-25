@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+		<meta http-equiv="Pragma" content="no-cache" />
+		<meta http-equiv="Expires" content="0" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link rel="icon" type="image/png" href="img/favicon-256.png" />
+		<title>Генератор цінників</title>
+		<style>
+			#loading.spinner {
+				left: 50%;
+				margin-left: -20px;
+				top: 50%;
+				margin-top: -20px;
+				position: absolute;
+				z-index: 19 !important;
+				animation: loading-bar-spinner 400ms linear infinite;
+			}
+
+			#loading.spinner .spinner-icon {
+				width: 40px;
+				height: 40px;
+				border: solid 4px transparent;
+				border-top-color: #0d6efd !important;
+				border-left-color: #0d6efd !important;
+				border-radius: 50%;
+			}
+
+			@keyframes loading-bar-spinner {
+				0% {
+					transform: rotate(0deg);
+					transform: rotate(0deg);
+				}
+				100% {
+					transform: rotate(360deg);
+					transform: rotate(360deg);
+				}
+			}
+		</style>
+		<script>
+			window.addEventListener('load', (event) => {
+				const strApplicationURL = "https://script.google.com/macros/s/AKfycbwypzlA8YI0Fo33BNBX3Jyv2NVBKDS8QxmD4qUelfP1V1KRh8Fhq4oIp1cTAuvsqllqMA/exec";
+				const strCurUrl = new URL(window.location.href);
+				let strCode = (strCurUrl.searchParams.get("code")||'');
+				if(strCode!==''){strCode = '&code='+strCode}
+
+				let objIframe = document.createElement("iframe");
+				objIframe.id="iframeWindow";
+				objIframe.setAttribute("style","display: none; position: fixed; top: 0; left: 0; bottom: 0; right: 0; width: 100%; height: 100%; border: none; margin: 0; padding: 0; overflow: hidden; z-index: 99999");
+				objIframe.src = strApplicationURL+"?strParent="+location.protocol + '//' + location.host + location.pathname + strCode;
+				objIframe.onload = ()=>{
+					document.getElementById('loading').remove();
+					document.getElementById('iframeWindow').style.display = 'block';
+					if(strCode!==''){setTimeout(() => {window.close();}, 5000);}
+				};
+				document.body.appendChild(objIframe);
+			});
+		</script>
+	</head>
+	<body>
+		<div id="loading" class="spinner"><div class="spinner-icon"></div></div>
+	</body>
+</html>
