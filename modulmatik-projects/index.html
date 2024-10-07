@@ -53,6 +53,7 @@
 				objIframe.onload = ()=>{
 					document.getElementById('loading').remove();
 					document.getElementById('iframeWindow').style.display = 'block';
+					document.getElementById('iframeWindow').contentWindow.focus();
 				};
 				document.body.appendChild(objIframe);
 			});
