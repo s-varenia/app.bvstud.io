@@ -49,7 +49,7 @@
 				let objIframe = document.createElement("iframe");
 				objIframe.id="iframeWindow";
 				objIframe.setAttribute("style","display: none; position: fixed; top: 0; left: 0; bottom: 0; right: 0; width: 100%; height: 100%; border: none; margin: 0; padding: 0; overflow: hidden; z-index: 99999");
-				// objIframe.setAttribute("sandbox","allow");
+				objIframe.setAttribute("allow","clipboard-write");
 				objIframe.src = strApplicationURL+"?strParent="+location.protocol + '//' + location.host + location.pathname + strProjectId;
 
 				objIframe.onload = ()=>{
