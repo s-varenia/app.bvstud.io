@@ -8101,6 +8101,21 @@ if (! jSuites && typeof(require) === 'function') {
             var x = parseInt(cell.getAttribute('data-x'));
             var y = parseInt(cell.getAttribute('data-y'));
 
+            let strCellType = obj.options.columns[x].type;
+            // ---- custom modification - start
+            let objCell = null;
+            if (obj.options.cells.length>0) {
+                //cell modifier appiered
+                objCell = obj.options.cells.find(objCell => (objCell.row === +y && objCell.col === +x));
+                if(objCell){
+                    if(objCell.type){
+                        strCellType = objCell.type;
+                    }
+                }
+            }
+            // ---- custom modification - end
+
+
             // Get cell properties
             if (save == true) {
                 // If custom editor
@@ -8109,20 +8124,20 @@ if (! jSuites && typeof(require) === 'function') {
                     var value = obj.options.columns[x].editor.closeEditor(cell, save);
                 } else {
                     // Native functions
-                    if (obj.options.columns[x].type == 'checkbox' || obj.options.columns[x].type == 'radio' || obj.options.columns[x].type == 'hidden') {
+                    if (strCellType == 'checkbox' ||strCellType == 'radio' || strCellType == 'hidden') {
                         // Do nothing
-                    } else if (obj.options.columns[x].type == 'dropdown' || obj.options.columns[x].type == 'autocomplete') {
+                    } else if (strCellType == 'dropdown' || strCellType == 'autocomplete') {
                         var value = cell.children[0].dropdown.close(true);
-                    } else if (obj.options.columns[x].type == 'calendar') {
+                    } else if (strCellType == 'calendar') {
                         var value = cell.children[0].calendar.close(true);
-                    } else if (obj.options.columns[x].type == 'color') {
+                    } else if (strCellType == 'color') {
                         var value = cell.children[0].color.close(true);
-                    } else if (obj.options.columns[x].type == 'html') {
+                    } else if (strCellType == 'html') {
                         var value = cell.children[0].children[0].editor.getData();
-                    } else if (obj.options.columns[x].type == 'image') {
+                    } else if (strCellType == 'image') {
                         var img = cell.children[0].children[0].children[0];
                         var value = img && img.tagName == 'IMG' ? img.src : '';
-                    } else if (obj.options.columns[x].type == 'numeric') {
+                    } else if (strCellType == 'numeric') {
                         var value = cell.children[0].value;
                         if ((''+value).substr(0,1) != '=') {
                             if (value == '') {
@@ -8161,11 +8176,11 @@ if (! jSuites && typeof(require) === 'function') {
                     // Custom editor
                     obj.options.columns[x].editor.closeEditor(cell, save);
                 } else {
-                    if (obj.options.columns[x].type == 'dropdown' || obj.options.columns[x].type == 'autocomplete') {
+                    if (strCellType == 'dropdown' || strCellType == 'autocomplete') {
                         cell.children[0].dropdown.close(true);
-                    } else if (obj.options.columns[x].type == 'calendar') {
+                    } else if (strCellType == 'calendar') {
                         cell.children[0].calendar.close(true);
-                    } else if (obj.options.columns[x].type == 'color') {
+                    } else if (strCellType == 'color') {
                         cell.children[0].color.close(true);
                     } else {
                         cell.children[0].onblur = null;
