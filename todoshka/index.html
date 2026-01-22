@@ -43,42 +43,81 @@
 		<script src="https://telegram.org/js/telegram-web-app.js"></script>
 
 		<script>
-			window.addEventListener('load', (event) => {
+			// Функція для ініціалізації Telegram SDK та отримання користувача
+			function initTelegramApp() {
+				return new Promise((resolve) => {
+					// Перевіряємо чи завантажився Telegram SDK
+					if (window.Telegram && window.Telegram.WebApp) {
+						const tg = window.Telegram.WebApp;
+						tg.ready();
+						
+						// Отримуємо дані користувача
+						let userData = null;
+						if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
+							userData = tg.initDataUnsafe.user;
+							console.log("Telegram user data received:", userData);
+							// Зберігаємо дані глобально
+							window.tgCoachedUser = userData;
+						} else {
+							console.warn("Telegram user data not available");
+						}
+						
+						resolve(userData);
+					} else {
+						console.error("Telegram Web App SDK not loaded");
+						resolve(null);
+					}
+				});
+			}
+
+			// Чекаємо повного завантаження сторінки
+			window.addEventListener('load', async (event) => {
 				const strApplicationURL = "https://script.google.com/macros/s/AKfycbziQ8yhxcFE1H_tVakl5Q4saQjFx0M7PBFey4fIZqIr1lyla7wR_P-We7pvjfBsVaY3NQ/exec";
 				const strCurUrl = new URL(window.location.href);
 
-				// Цей код виконається миттєво, до завантаження 
-				window.tgData = null;
-				if (window.Telegram && window.Telegram.WebApp) {
-					const tg = window.Telegram.WebApp;
-					tg.ready();
-					
-					// Зберігаємо дані в глобальну змінну або localStorage,
-					// щоб Flutter не встиг їх стерти
-					if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
-						console.log("User saved before Flutter load:", tg.initDataUnsafe.user);
-						window.tgCoachedUser = tg.initDataUnsafe.user;
-					}else{
-						console.log("User not found");
-					}
-				}else{
-					console.log("Telegram Web App not found");
+				// Ініціалізуємо Telegram SDK та отримуємо користувача
+				const userData = await initTelegramApp();
+
+				// Формуємо параметри URL
+				let strCode = (strCurUrl.searchParams.get("code") || '');
+				if (strCode !== '') {
+					strCode = '&code=' + strCode;
 				}
 
+				// Додаємо дані користувача до URL якщо вони є
+				let userParams = '';
+				if (userData) {
+					userParams = '&tgUserId=' + encodeURIComponent(userData.id || '');
+					if (userData.first_name) {
+						userParams += '&tgFirstName=' + encodeURIComponent(userData.first_name);
+					}
+					if (userData.last_name) {
+						userParams += '&tgLastName=' + encodeURIComponent(userData.last_name);
+					}
+					if (userData.username) {
+						userParams += '&tgUsername=' + encodeURIComponent(userData.username);
+					}
+					if (userData.language_code) {
+						userParams += '&tgLang=' + encodeURIComponent(userData.language_code);
+					}
+				}
 
-				let strCode = (strCurUrl.searchParams.get("code")||'');
-				if(strCode!==''){strCode = '&code='+strCode}
-
+				// Створюємо iframe з даними користувача
 				let objIframe = document.createElement("iframe");
-				objIframe.id="iframeWindow";
-				objIframe.setAttribute("style","display: none; position: fixed; top: 0; left: 0; bottom: 0; right: 0; width: 100%; height: 100%; border: none; margin: 0; padding: 0; overflow: hidden; z-index: 99999");
-				objIframe.src = strApplicationURL+"?strParent="+location.protocol + '//' + location.host + location.pathname + strCode;
-				objIframe.onload = ()=>{
+				objIframe.id = "iframeWindow";
+				objIframe.setAttribute("style", "display: none; position: fixed; top: 0; left: 0; bottom: 0; right: 0; width: 100%; height: 100%; border: none; margin: 0; padding: 0; overflow: hidden; z-index: 99999");
+				objIframe.src = strApplicationURL + "?strParent=" + location.protocol + '//' + location.host + location.pathname + strCode + userParams;
+				
+				objIframe.onload = () => {
 					document.getElementById('loading').remove();
 					document.getElementById('iframeWindow').style.display = 'block';
-					if(strCode!==''){setTimeout(() => {window.close();}, 5000);}
+					if (strCode !== '') {
+						setTimeout(() => { window.close(); }, 5000);
+					}
 				};
+				
 				document.body.appendChild(objIframe);
+				console.log("Iframe created with URL:", objIframe.src);
 			});
 		</script>
 	</head>
