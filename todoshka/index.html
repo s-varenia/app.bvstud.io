@@ -58,7 +58,11 @@
 					if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
 						console.log("User saved before Flutter load:", tg.initDataUnsafe.user);
 						window.tgCoachedUser = tg.initDataUnsafe.user;
+					}else{
+						console.log("User not found");
 					}
+				}else{
+					console.log("Telegram Web App not found");
 				}
 
 
