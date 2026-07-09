@@ -40,21 +40,68 @@
 			}
 		</style>
 		<script>
-			window.addEventListener('load', (event) => {
+			window.addEventListener('load', () => {
 				const strApplicationURL = "https://script.google.com/macros/s/AKfycbwfgJCPtLM96czVNpUqhbQ49VUk306_t6tuGU4DG7fGhv3Izc31Bruy0_jp4G5uwY1I/exec";
-				const strCurUrl = new URL(window.location.href);
-				let strCode = (strCurUrl.searchParams.get("code")||'');
-				if(strCode!==''){strCode = '&code='+strCode}
-
-				let objIframe = document.createElement("iframe");
-				objIframe.id="iframeWindow";
-				objIframe.setAttribute("style","display: none; position: fixed; top: 0; left: 0; bottom: 0; right: 0; width: 100%; height: 100%; border: none; margin: 0; padding: 0; overflow: hidden; z-index: 99999");
-				objIframe.src = strApplicationURL+"?strParent="+location.protocol + '//' + location.host + location.pathname + strCode;
-				objIframe.onload = ()=>{
-					document.getElementById('loading').remove();
-					document.getElementById('iframeWindow').style.display = 'block';
-					if(strCode!==''){setTimeout(() => {window.close();}, 5000);}
+		
+				const curUrl = new URL(window.location.href);
+				const code = curUrl.searchParams.get("code") || "";
+				const parentUrl = location.origin + location.pathname;
+				const frameToken = crypto.randomUUID ? crypto.randomUUID() : String(Date.now()) + Math.random();
+		
+				const appUrl = new URL(strApplicationURL);
+				appUrl.searchParams.set("strParent", parentUrl);
+				appUrl.searchParams.set("frameToken", frameToken);
+				if (code) appUrl.searchParams.set("code", code);
+		
+				let finished = false;
+				let objIframe = null;
+		
+				const redirectToGoogleScript = () => {
+					if (finished) return;
+					finished = true;
+					window.location.replace(appUrl.toString());
 				};
+		
+				const showIframe = () => {
+					if (finished) return;
+					finished = true;
+					clearTimeout(fallbackTimer);
+		
+					const loading = document.getElementById('loading');
+					if (loading) loading.remove();
+		
+					objIframe.style.display = 'block';
+		
+					if (code) {
+						setTimeout(() => {
+							window.close();
+						}, 5000);
+					}
+				};
+		
+				window.addEventListener('message', (event) => {
+					const data = event.data || {};
+		
+					if (
+						data.type === 'auchan-balisage-ready' &&
+						data.frameToken === frameToken
+					) {
+						showIframe();
+					}
+				});
+		
+				const fallbackTimer = setTimeout(redirectToGoogleScript, 10000);
+		
+				objIframe = document.createElement("iframe");
+				objIframe.id = "iframeWindow";
+				objIframe.setAttribute(
+					"style",
+					"display: none; position: fixed; top: 0; left: 0; bottom: 0; right: 0; width: 100%; height: 100%; border: none; margin: 0; padding: 0; overflow: hidden; z-index: 99999"
+				);
+		
+				objIframe.src = appUrl.toString();
+				objIframe.onerror = redirectToGoogleScript;
+		
 				document.body.appendChild(objIframe);
 			});
 		</script>
