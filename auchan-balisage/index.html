@@ -43,36 +43,41 @@
 			window.addEventListener('load', () => {
 				const strApplicationURL = "https://script.google.com/macros/s/AKfycbwfgJCPtLM96czVNpUqhbQ49VUk306_t6tuGU4DG7fGhv3Izc31Bruy0_jp4G5uwY1I/exec";
 		
-				const curUrl = new URL(window.location.href);
-				const code = curUrl.searchParams.get("code") || "";
-				const parentUrl = location.origin + location.pathname;
-				const frameToken = crypto.randomUUID ? crypto.randomUUID() : String(Date.now()) + Math.random();
+				const strCurUrl = new URL(window.location.href);
+				const strCode = strCurUrl.searchParams.get("code") || "";
+				const strParent = location.origin + location.pathname;
+				const strFrameToken = crypto.randomUUID ? crypto.randomUUID() : String(Date.now()) + Math.random();
 		
-				const appUrl = new URL(strApplicationURL);
-				appUrl.searchParams.set("strParent", parentUrl);
-				appUrl.searchParams.set("frameToken", frameToken);
-				if (code) appUrl.searchParams.set("code", code);
+				const objIframeUrl = new URL(strApplicationURL);
+				objIframeUrl.searchParams.set("strParent", strParent);
+				objIframeUrl.searchParams.set("frameToken", strFrameToken);
 		
-				let finished = false;
+				if (strCode !== "") {
+					objIframeUrl.searchParams.set("code", strCode);
+				}
+		
+				let boolFinished = false;
 				let objIframe = null;
 		
 				const redirectToGoogleScript = () => {
-					if (finished) return;
-					finished = true;
-					window.location.replace(appUrl.toString());
+					if (boolFinished) return;
+		
+					boolFinished = true;
+					window.location.replace(strApplicationURL);
 				};
 		
 				const showIframe = () => {
-					if (finished) return;
-					finished = true;
-					clearTimeout(fallbackTimer);
+					if (boolFinished) return;
 		
-					const loading = document.getElementById('loading');
-					if (loading) loading.remove();
+					boolFinished = true;
+					clearTimeout(objFallbackTimer);
+		
+					const objLoading = document.getElementById('loading');
+					if (objLoading) objLoading.remove();
 		
 					objIframe.style.display = 'block';
 		
-					if (code) {
+					if (strCode !== "") {
 						setTimeout(() => {
 							window.close();
 						}, 5000);
@@ -80,17 +85,17 @@
 				};
 		
 				window.addEventListener('message', (event) => {
-					const data = event.data || {};
+					const objData = event.data || {};
 		
 					if (
-						data.type === 'auchan-balisage-ready' &&
-						data.frameToken === frameToken
+						objData.type === 'auchan-balisage-ready' &&
+						objData.frameToken === strFrameToken
 					) {
 						showIframe();
 					}
 				});
 		
-				const fallbackTimer = setTimeout(redirectToGoogleScript, 10000);
+				const objFallbackTimer = setTimeout(redirectToGoogleScript, 10000);
 		
 				objIframe = document.createElement("iframe");
 				objIframe.id = "iframeWindow";
@@ -99,7 +104,7 @@
 					"display: none; position: fixed; top: 0; left: 0; bottom: 0; right: 0; width: 100%; height: 100%; border: none; margin: 0; padding: 0; overflow: hidden; z-index: 99999"
 				);
 		
-				objIframe.src = appUrl.toString();
+				objIframe.src = objIframeUrl.toString();
 				objIframe.onerror = redirectToGoogleScript;
 		
 				document.body.appendChild(objIframe);
