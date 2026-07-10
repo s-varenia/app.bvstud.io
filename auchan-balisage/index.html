@@ -40,78 +40,55 @@
 			}
 		</style>
 		<script>
-			window.addEventListener('load', () => {
+			window.addEventListener('load', (event) => {
 				const strApplicationURL = "https://script.google.com/macros/s/AKfycbwfgJCPtLM96czVNpUqhbQ49VUk306_t6tuGU4DG7fGhv3Izc31Bruy0_jp4G5uwY1I/exec";
-		
 				const strCurUrl = new URL(window.location.href);
-				const strCode = strCurUrl.searchParams.get("code") || "";
-				const strParent = location.origin + location.pathname;
-				const strFrameToken = crypto.randomUUID ? crypto.randomUUID() : String(Date.now()) + Math.random();
+				let strCode = (strCurUrl.searchParams.get("code")||'');
+				if(strCode!==''){strCode = '&code='+strCode}
 		
-				const objIframeUrl = new URL(strApplicationURL);
-				objIframeUrl.searchParams.set("strParent", strParent);
-				objIframeUrl.searchParams.set("frameToken", strFrameToken);
+				const strFullUrl = strApplicationURL+"?strParent="+location.protocol + '//' + location.host + location.pathname + strCode;
 		
-				if (strCode !== "") {
-					objIframeUrl.searchParams.set("code", strCode);
-				}
-		
-				let boolFinished = false;
-				let objIframe = null;
-		
-				const redirectToGoogleScript = () => {
-					if (boolFinished) return;
-		
-					boolFinished = true;
+				// Редирект на пряме посилання, якщо iframe заблоковано
+				const fallbackRedirect = () => {
 					window.location.replace(strApplicationURL);
 				};
 		
-				const showIframe = () => {
-					if (boolFinished) return;
+				// Страховка: якщо за 10 секунд load так і не спрацював – редиректим
+				let redirectTimer = setTimeout(fallbackRedirect, 10000);
 		
-					boolFinished = true;
-					clearTimeout(objFallbackTimer);
+				let objIframe = document.createElement("iframe");
+				objIframe.id="iframeWindow";
+				objIframe.setAttribute("style","display: none; position: fixed; top: 0; left: 0; bottom: 0; right: 0; width: 100%; height: 100%; border: none; margin: 0; padding: 0; overflow: hidden; z-index: 99999");
+				objIframe.src = strFullUrl;
 		
-					const objLoading = document.getElementById('loading');
-					if (objLoading) objLoading.remove();
+				objIframe.onload = ()=>{
+					clearTimeout(redirectTimer);
 		
-					objIframe.style.display = 'block';
-		
-					if (strCode !== "") {
-						setTimeout(() => {
-							window.close();
-						}, 5000);
+					// Перевіряємо, чи реально завантажилась сторінка.
+					// Успішне крос-доменне завантаження -> contentDocument недоступне (null/виключення).
+					// Блокування X-Frame-Options -> браузер підставляє свою сторінку помилки,
+					// і contentDocument виявляється доступним.
+					let blocked = false;
+					try {
+						if (objIframe.contentDocument !== null) {
+							blocked = true;
+						}
+					} catch (e) {
+						// виняток = крос-доменний документ завантажений, все добре
+						blocked = false;
 					}
+		
+					if (blocked) {
+						fallbackRedirect();
+						return;
+					}
+		
+					document.getElementById('loading').remove();
+					document.getElementById('iframeWindow').style.display = 'block';
+					if(strCode!==''){setTimeout(() => {window.close();}, 5000);}
 				};
 		
-				window.addEventListener('message', (event) => {
-					const objData = event.data || {};
-
-					console.log('Iframe message:', {
-						origin: event.origin,
-						objData: objData,
-						isCurrentIframe: event.source === objIframe.contentWindow
-					});
-		
-					if (
-						objData.type === 'auchan-balisage-ready' &&
-						objData.frameToken === strFrameToken
-					) {
-						showIframe();
-					}
-				});
-		
-				const objFallbackTimer = setTimeout(redirectToGoogleScript, 15000);
-		
-				objIframe = document.createElement("iframe");
-				objIframe.id = "iframeWindow";
-				objIframe.setAttribute(
-					"style",
-					"display: none; position: fixed; top: 0; left: 0; bottom: 0; right: 0; width: 100%; height: 100%; border: none; margin: 0; padding: 0; overflow: hidden; z-index: 99999"
-				);
-		
-				objIframe.src = objIframeUrl.toString();
-				objIframe.onerror = redirectToGoogleScript;
+				objIframe.onerror = fallbackRedirect;
 		
 				document.body.appendChild(objIframe);
 			});
