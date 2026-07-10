@@ -86,6 +86,12 @@
 		
 				window.addEventListener('message', (event) => {
 					const objData = event.data || {};
+
+					console.log('Iframe message:', {
+						origin: event.origin,
+						objData: objData,
+						isCurrentIframe: event.source === objIframe.contentWindow
+					});
 		
 					if (
 						objData.type === 'auchan-balisage-ready' &&
